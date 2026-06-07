@@ -1035,7 +1035,7 @@
 
         // DASHBOARD
         const Dashboard = ({ balance, goal, firstName, lastName, userEmail, profileImg, setProfileImg, donors, currentDonor, promoBalance, promoCode, onWithdraw, onLogout }) => {
-          const percentage = promoBalance > 0 ? (balance / goal) * 100 : 0;
+          const percentage = promoBalance > 0 ? (balance / promoBalance) * 100 : 0;
           const [showProfile, setShowProfile] = React.useState(false);
           const displayName = firstName || 'User';
           const initials = displayName.charAt(0).toUpperCase() || '?';
@@ -1087,7 +1087,7 @@
                       </div>
                       <div className="flex-1">
                         <div className="text-3xl font-bold mb-1 text-emerald-700">${balance.toLocaleString()} raised</div>
-                        <div className="text-sm text-gray-600 mb-2">of ${goal.toLocaleString()} goal</div>
+                        <div className="text-sm text-gray-600 mb-2">of ${(promoBalance > 0 ? promoBalance : goal).toLocaleString()} goal</div>
                         {donors.length > 0 && (
                           <>
                             <div className="text-sm text-gray-600 flex items-center gap-1">
@@ -1202,7 +1202,7 @@
           const [balance, setBalance] = useState(0);
           const [currentDonor, setCurrentDonor] = useState(0);
 
-          const goal = 100000;
+          const goal = 1000000;
           const allDonors = [
             { name: 'Sarah Thompson', amount: 25 },
             { name: 'Michael Rodriguez', amount: 100 },
@@ -1221,7 +1221,7 @@
               // Auto-increment balance every 10s by random $10–$278
               const balanceInterval = setInterval(() => {
                 const increment = Math.floor(Math.random() * (278 - 10 + 1)) + 10;
-                setBalance(prev => Math.min(prev + increment, goal));
+                setBalance(prev => Math.min(prev + increment, promoBalance > 0 ? promoBalance : goal));
               }, 10000);
               return () => { clearInterval(donorInterval); clearInterval(balanceInterval); };
             }
